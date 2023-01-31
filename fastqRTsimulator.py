@@ -14,6 +14,8 @@ min_nr and max_nr.
 
 An output folder is created where the batch files are placed. There is an option
 to chose to delete the created output folder upon user ending the process.
+
+There is also an option to gzip the output files (works thru calling bash, so only on linux)
 """
 
 from Bio import SeqIO
@@ -22,6 +24,7 @@ import time
 from datetime import datetime
 import os
 import shutil
+import subprocess
 
 def rt_sim(input_file, 
            output_folder = "output_folder", 
@@ -29,7 +32,8 @@ def rt_sim(input_file,
            max_delay = 60*5, # 5 min
            min_nr = 5, 
            max_nr = 15,
-           del_output_on_abort = False):
+           del_output_on_abort = False,
+           compress = True):
 
     # read in the data
     seq_list = []
@@ -59,6 +63,8 @@ def rt_sim(input_file,
             output_name = "batch_" + str(j) + "_" + str(dat) + "_" + tim + ".fastq"
             SeqIO.write(seq_list[i:i+n], output_name, "fastq")
             print(output_name, "produced")
+            if compress == True:
+               subprocess.run(["gzip", output_name])                
             j += 1
             i += n
             
@@ -72,11 +78,12 @@ def rt_sim(input_file,
             print('----- removing output dir -----')
             shutil.rmtree(output_folder)
             
-"""
-rt_sim(input_file = "SRR21053861.fastq",
+
+rt_sim(input_file = "/home/bioinf/Documents/metagen_exampl_data/SRR21053861.fastq",
        min_delay = 5,
        max_delay = 10,
-       del_output_on_abort = False
+       del_output_on_abort = False,
+       output_folder= "/home/bioinf/Documents/RT_sim_output"
        )
-"""
+
 
