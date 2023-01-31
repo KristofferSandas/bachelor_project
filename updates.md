@@ -1,5 +1,7 @@
 # 31 jan 2023  - nanopore sim & initial RT sketch
 
+#### On branch RTsim_GZ 
+
 
 ### nanopore real time simulator
 The python function *rt_sim_testdata* copies one compressed fastq file at a time from the test data "fastq/pass" folder at a specified time interval. 
